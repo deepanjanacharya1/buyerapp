@@ -28,4 +28,5 @@ export const Colors = {
    GRAY:'#808080',
    WHITE:'#FFFFFF',
    BLACK:'#000000',
+   ICON_BG:'#E6E6FA'
 };
