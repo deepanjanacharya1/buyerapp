@@ -2,45 +2,12 @@ import { View, Text, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { Colors } from './../constants/Colors'
 import { StyleSheet } from 'react-native'
-import * as WebBrowser from  'expo-web-browser'
-import { useOAuth } from '@clerk/clerk-expo'
-import * as Linking from 'expo-linking'
-
-export const useWarmUpBrowser = () => {
-    React.useEffect(() => {
-      // Warm up the android browser to improve UX
-      // https://docs.expo.dev/guides/authentication/#improving-user-experience
-      void WebBrowser.warmUpAsync()
-      return () => {
-        void WebBrowser.coolDownAsync()
-      }
-    }, [])
-  }
-  
-  WebBrowser.maybeCompleteAuthSession()
-
+import { useRouter } from 'expo-router'
 
 export default function LoginScreen() {
-  
-    useWarmUpBrowser();
-    const { startOAuthFlow } = useOAuth({ strategy: 'oauth_google' })
-    const onPress = React.useCallback(async () => {
-        try {
-          const { createdSessionId, signIn, signUp, setActive } = await startOAuthFlow({
-            redirectUrl: Linking.createURL('/dashboard', { scheme: 'myapp' }),
-          })
-    
-          if (createdSessionId) {
+     
+    const router = useRouter();
 
-          } else {
-            // Use signIn or signUp for next steps such as MFA
-          }
-        } catch (err) {
-          console.error('OAuth error', err)
-        }
-      }, [])
-
-    
   return (
     <View>
         <View style={{
@@ -51,7 +18,7 @@ export default function LoginScreen() {
         }}>
         <Image source={require('./../assets/images/digital-grocery-shopping-stockcake.jpg')}
             style={{
-                width:412,
+                width:'100%',
                 height:450,
                 borderRadius:0,
                 borderWidth:1,
@@ -64,24 +31,25 @@ export default function LoginScreen() {
             <Text style={{
                 fontSize:30,
                 fontFamily:'outfit-bold',
-                textAlign:'center'
+                textAlign:'center',
+                marginTop:10
             }}>Awesome App{'\n'}
                 <Text style={{color:Colors.PRIMARY,
                 }}>Your One Stop Ordering Platorm</Text>
             </Text>
             <Text style={{
-                fontSize:15,
+                fontSize:17,
                 fontFamily:'outfit',
                 textAlign:'center',
-                marginVertical:15,
+                marginVertical:20,
                 color:Colors.GRAY
-            }}>Your favourite order and services app for all your day to day needs
-            </Text>
-            <TouchableOpacity style={styles.buttonCust} onPress={onPress}>
+            }}>Your favourite order and services app for all your day to day needs</Text>
+            <TouchableOpacity style={styles.buttonCust} onPress={()=>router.push('auth/signIn')}>
                 <Text style={{
                     textAlign:'center',
                     color:'#ffff',
-                    fontFamily:'outfit'
+                    fontFamily:'outfit',
+                    fontSize:17
                 }}>Lets Get Started</Text>
             </TouchableOpacity>
         </View>
